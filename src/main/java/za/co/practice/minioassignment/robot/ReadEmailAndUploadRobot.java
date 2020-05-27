@@ -2,6 +2,9 @@ package za.co.practice.minioassignment.robot;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import za.co.practice.minioassignment.model.Status;
 import za.co.practice.minioassignment.model.UserCredentials;
 import za.co.practice.minioassignment.service.EwsService;
@@ -18,6 +21,7 @@ import za.co.practice.minioassignment.util.EmailAttachment;
 public class ReadEmailAndUploadRobot implements IRobotCapabilities {
     private IEmailService emailService;
     private ICloudStorageService cloudStorageService;
+    private Logger logger;
 
     @Override
     public Status perform() {
@@ -28,7 +32,7 @@ public class ReadEmailAndUploadRobot implements IRobotCapabilities {
         ICloudStorageClient cloudStorageClient = cloudStorageService.initClient(cloudCreds);
         boolean isExist = cloudStorageClient.isBucketExists("attachments");
         if (isExist) {
-            System.out.println("Bucket already exists.");
+            logger.error("Bucket already exists.");
         } else {
             cloudStorageClient.createBucket("attachments");
         }
@@ -40,6 +44,12 @@ public class ReadEmailAndUploadRobot implements IRobotCapabilities {
     public void init() {
         emailService = new EwsService();
         cloudStorageService = new MinioCloudService();
+        logger = LoggerFactory.getLogger(this.getClass());
+    }
+
+    @Override
+    public Logger getLogger() {
+        return logger;
     }
 
 }

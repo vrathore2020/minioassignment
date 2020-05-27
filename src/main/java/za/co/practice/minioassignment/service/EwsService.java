@@ -3,6 +3,9 @@ package za.co.practice.minioassignment.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.PropertySet;
 import microsoft.exchange.webservices.data.core.enumeration.misc.ExchangeVersion;
@@ -24,9 +27,11 @@ import za.co.practice.minioassignment.util.EmailServiceException;
 public class EwsService implements IEmailService {
 
     private final ExchangeService service;
+    private final Logger logger;
 
     public EwsService() {
         service = new ExchangeService(ExchangeVersion.Exchange2010_SP2);
+        logger = LoggerFactory.getLogger(getClass());
     }
 
     @Override
@@ -52,11 +57,11 @@ public class EwsService implements IEmailService {
             service.loadPropertiesForItems(findResults, PropertySet.FirstClassProperties);
             for (Item item : findResults.getItems()) {
                 // Do something with the item as shown
-                System.out.println("id==========" + item.getId());
-                System.out.println("sub==========" + item.getSubject());
+                logger.debug("id=========={}", item.getId());
+                logger.debug("sub=========={}", item.getSubject());
                 if (item instanceof EmailMessage && item.getHasAttachments()) {
                     // If the item is an e-mail message, write the sender's name.
-                    System.out.println(((EmailMessage) item).getSender().getName());
+                    logger.debug(((EmailMessage) item).getSender().getName());
                     results.addAll(getAttachments(service, item.getId()));
                 }
             }
@@ -67,7 +72,7 @@ public class EwsService implements IEmailService {
     }
 
     private List<EmailAttachment> getAttachments(ExchangeService service, ItemId itemID) throws Exception {
-        System.out.println("getAttachment");
+        logger.debug("getAttachments");
         final List<EmailAttachment> list = new ArrayList<>();
         // Bind to an existing message item and retrieve the attachments collection.
         // This method results in an GetItem call to EWS.
