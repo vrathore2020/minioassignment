@@ -15,35 +15,31 @@ import za.co.practice.minioassignment.util.EmailAttachment;
  * Hello world!
  *
  */
-public class ReadEmailAndUploadRobot implements IRobotCapabilities
-{
-	private IEmailService emailService;
-	private ICloudStorageService cloudStorageService;
-	
-	@Override
-	public Status perform() {
-		final UserCredentials userCreds = new UserCredentials("vinay.rathor@corpus.com", "pwd");
-		emailService.connect(userCreds);
-		List<EmailAttachment> attachmentsToUpload = emailService.retrieveEmailAttachmentsToProcess();
-		final UserCredentials cloudCreds = new UserCredentials("minioadmin", "minioadmin");
-		ICloudStorageClient cloudStorageClient = cloudStorageService.initClient(cloudCreds);
-		boolean isExist = cloudStorageClient.isBucketExists("attachments");
-		if (isExist)
-		{
-			System.out.println("Bucket already exists.");
-		}
-		else
-		{
-			cloudStorageClient.createBucket("attachments");
-		}
-		attachmentsToUpload.forEach(attachment -> cloudStorageClient.uploadObject("attachments", "reademailuploadrobot", attachment.getFileData().getName()));
-		return Status.SUCCESS;
-	}
+public class ReadEmailAndUploadRobot implements IRobotCapabilities {
+    private IEmailService emailService;
+    private ICloudStorageService cloudStorageService;
 
-	@Override
-	public void init() {
-		emailService = new EwsService();
-		cloudStorageService = new MinioCloudService();
-	}
+    @Override
+    public Status perform() {
+        final UserCredentials userCreds = new UserCredentials("vinay.rathor@corpus.com", "pwd");
+        emailService.connect(userCreds);
+        List<EmailAttachment> attachmentsToUpload = emailService.retrieveEmailAttachmentsToProcess();
+        final UserCredentials cloudCreds = new UserCredentials("minioadmin", "minioadmin");
+        ICloudStorageClient cloudStorageClient = cloudStorageService.initClient(cloudCreds);
+        boolean isExist = cloudStorageClient.isBucketExists("attachments");
+        if (isExist) {
+            System.out.println("Bucket already exists.");
+        } else {
+            cloudStorageClient.createBucket("attachments");
+        }
+        attachmentsToUpload.forEach(attachment -> cloudStorageClient.uploadObject("attachments", "reademailuploadrobot", attachment.getFileData().getName()));
+        return Status.SUCCESS;
+    }
+
+    @Override
+    public void init() {
+        emailService = new EwsService();
+        cloudStorageService = new MinioCloudService();
+    }
 
 }

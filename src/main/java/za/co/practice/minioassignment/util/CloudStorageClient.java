@@ -16,50 +16,48 @@ import za.co.practice.minioassignment.service.ICloudStorageClient;
 
 public class CloudStorageClient implements ICloudStorageClient {
 
-	private final MinioClient innerClient;
+    private final MinioClient innerClient;
 
-	public CloudStorageClient(MinioClient innerClient) {
-		super();
-		this.innerClient = innerClient;
-	}
+    public CloudStorageClient(MinioClient innerClient) {
+        super();
+        this.innerClient = innerClient;
+    }
 
-	public MinioClient getInnerClient() {
-		return innerClient;
-	}
+    public MinioClient getInnerClient() {
+        return innerClient;
+    }
 
-	@Override
-	public boolean createBucket(String name) {
-		try {
-			innerClient.makeBucket(name);
-		} catch (InvalidKeyException | InvalidBucketNameException | IllegalArgumentException | RegionConflictException
-				| NoSuchAlgorithmException | InsufficientDataException | XmlParserException | ErrorResponseException
-				| InternalException | InvalidResponseException | IOException e) {
-			throw new CloudStorageException(e);
-		}
-		return true;
-	}
+    @Override
+    public boolean createBucket(String name) {
+        try {
+            innerClient.makeBucket(name);
+        } catch (InvalidKeyException | InvalidBucketNameException | IllegalArgumentException | RegionConflictException | NoSuchAlgorithmException | InsufficientDataException
+                | XmlParserException | ErrorResponseException | InternalException | InvalidResponseException | IOException e) {
+            throw new CloudStorageException(e);
+        }
+        return true;
+    }
 
-	@Override
-	public boolean isBucketExists(String name) {
-		boolean bucketExist = false;
-		try {
-			bucketExist = innerClient.bucketExists(name);
-		} catch (InvalidKeyException | InvalidBucketNameException | IllegalArgumentException | NoSuchAlgorithmException
-				| InsufficientDataException | XmlParserException | ErrorResponseException | InternalException
-				| InvalidResponseException | IOException e) {
-			throw new CloudStorageException(e);
-		}
-		return bucketExist;
-	}
+    @Override
+    public boolean isBucketExists(String name) {
+        boolean bucketExist = false;
+        try {
+            bucketExist = innerClient.bucketExists(name);
+        } catch (InvalidKeyException | InvalidBucketNameException | IllegalArgumentException | NoSuchAlgorithmException | InsufficientDataException | XmlParserException
+                | ErrorResponseException | InternalException | InvalidResponseException | IOException e) {
+            throw new CloudStorageException(e);
+        }
+        return bucketExist;
+    }
 
-	@Override
-	public boolean uploadObject(String bucketName, String folderName, String fileName) {
-		try {
-			innerClient.putObject(bucketName, folderName, fileName, null);
-		} catch (InvalidKeyException | InvalidBucketNameException | IllegalArgumentException | NoSuchAlgorithmException | InsufficientDataException | XmlParserException | ErrorResponseException
-				| InternalException | InvalidResponseException | IOException e) {
-			throw new CloudStorageException(e);
-		}
-		return true;
-	}
+    @Override
+    public boolean uploadObject(String bucketName, String folderName, String fileName) {
+        try {
+            innerClient.putObject(bucketName, folderName, fileName, null);
+        } catch (InvalidKeyException | InvalidBucketNameException | IllegalArgumentException | NoSuchAlgorithmException | InsufficientDataException | XmlParserException
+                | ErrorResponseException | InternalException | InvalidResponseException | IOException e) {
+            throw new CloudStorageException(e);
+        }
+        return true;
+    }
 }

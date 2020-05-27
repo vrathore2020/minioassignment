@@ -6,8 +6,8 @@ import za.co.practice.minioassignment.model.UserCredentials;
 import za.co.practice.minioassignment.util.EmailAttachment;
 
 public interface IEmailService {
-	
-	boolean connect(final UserCredentials creds);
-	
-	List<EmailAttachment> retrieveEmailAttachmentsToProcess();
+
+    boolean connect(final UserCredentials creds);
+
+    List<EmailAttachment> retrieveEmailAttachmentsToProcess();
 }

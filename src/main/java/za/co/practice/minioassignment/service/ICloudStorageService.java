@@ -4,5 +4,5 @@ import za.co.practice.minioassignment.model.UserCredentials;
 
 public interface ICloudStorageService {
 
-	ICloudStorageClient initClient(final UserCredentials creds);
+    ICloudStorageClient initClient(final UserCredentials creds);
 }
