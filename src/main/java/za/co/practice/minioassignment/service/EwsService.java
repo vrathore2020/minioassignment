@@ -31,7 +31,7 @@ public class EwsService implements IEmailService {
 
     public EwsService() {
         service = new ExchangeService(ExchangeVersion.Exchange2010_SP2);
-        logger = LoggerFactory.getLogger(getClass());
+        logger = null;// LoggerFactory.getLogger(getClass());
     }
 
     @Override
